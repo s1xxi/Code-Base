@@ -32,7 +32,7 @@ export default function DashboardNav({ user }) {
             </li>
             <li><Link href="/dashboard">Dashboard</Link></li>
             <li><Link href="/settings">Settings</Link></li>
-            <li><button onClick={() => signOut()}>Logout</button></li>
+            <li><button onClick={() => signOut({ callbackUrl: '/' })}>Logout</button></li>
           </ul>
         </div>
       </div>

@@ -21,7 +21,7 @@ export default function ButtonSignin() {
         <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
           <li><Link href="/dashboard">Dashboard</Link></li>
           <li><Link href="/settings">Settings</Link></li>
-          <li><button onClick={() => signOut()}>Logout</button></li>
+          <li><button onClick={() => signOut({ callbackUrl: '/' })}>Logout</button></li>
         </ul>
       </div>
     )
