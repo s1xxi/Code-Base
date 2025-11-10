@@ -55,82 +55,81 @@ export default function Pricing() {
   ]
 
   return (
-    <section id="pricing" className="py-24 px-4 bg-white">
-      <div className="container mx-auto max-w-7xl">
-        <div className="text-center mb-16 animate-slide-down">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 text-[#0c4a6e]">
+    <section id="pricing" className="py-20 px-4 bg-[#e0f2fe]">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl md:text-4xl font-semibold mb-3 text-black">
             Simple pricing
           </h2>
-          <p className="text-xl text-[#0c4a6e]/70">
+          <p className="text-black/60">
             7-day free trial • Cancel anytime
           </p>
         </div>
 
         {/* Monthly/Yearly Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-16 animate-scale-in">
-          <span className={`text-lg font-semibold ${!isYearly ? 'text-[#0c4a6e]' : 'text-[#0c4a6e]/40'}`}>
+        <div className="flex items-center justify-center gap-4 mb-14">
+          <span className={`text-sm font-medium ${!isYearly ? 'text-black' : 'text-black/40'}`}>
             Monthly
           </span>
           
           <button
             onClick={() => setIsYearly(!isYearly)}
-            className="relative w-20 h-10 rounded-full bg-[#0c4a6e] transition-all duration-300"
+            className="relative w-16 h-8 rounded-full bg-black/10 transition-all duration-300"
           >
             <div
-              className={`absolute top-1 left-1 w-8 h-8 bg-white rounded-full shadow-lg transition-transform duration-300 ${
-                isYearly ? 'transform translate-x-10' : ''
+              className={`absolute top-1 left-1 w-6 h-6 bg-black rounded-full shadow transition-transform duration-300 ${
+                isYearly ? 'transform translate-x-8' : ''
               }`}
             ></div>
           </button>
           
-          <span className={`text-lg font-semibold ${isYearly ? 'text-[#0c4a6e]' : 'text-[#0c4a6e]/40'}`}>
+          <span className={`text-sm font-medium ${isYearly ? 'text-black' : 'text-black/40'}`}>
             Yearly
           </span>
           
           {isYearly && (
-            <span className="badge badge-lg bg-[#0ea5e9] text-white border-none font-semibold">
+            <span className="badge bg-black text-white border-none font-normal text-xs">
               Save up to 47%
             </span>
           )}
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`card bg-white shadow-xl hover:shadow-2xl transition-all duration-300 animate-slide-up ${
-                plan.popular ? 'border-4 border-[#0ea5e9]' : 'border border-[#0c4a6e]/20'
+              className={`card bg-white/50 border hover:bg-white/70 transition-colors duration-200 ${
+                plan.popular ? 'border-black' : 'border-black/10'
               }`}
-              style={{ animationDelay: `${index * 0.1}s` }}
             >
               {plan.popular && (
-                <div className="badge badge-lg bg-[#0ea5e9] text-white border-none absolute -top-3 left-1/2 transform -translate-x-1/2 font-bold px-6">
+                <div className="badge bg-black text-white border-none absolute -top-2 left-1/2 transform -translate-x-1/2 font-normal text-xs px-3">
                   MOST POPULAR
                 </div>
               )}
 
-              <div className="card-body p-8">
-                <h3 className="text-3xl font-bold text-[#0c4a6e] mb-2">{plan.name}</h3>
-                <p className="text-[#0c4a6e]/60 mb-6">{plan.description}</p>
+              <div className="card-body p-6">
+                <h3 className="text-xl font-semibold text-black mb-1">{plan.name}</h3>
+                <p className="text-black/50 text-sm mb-4">{plan.description}</p>
 
                 {/* Price */}
-                <div className="py-6 border-b border-[#0c4a6e]/10">
-                  <div className="flex items-start justify-center mb-2">
-                    <span className="text-3xl font-bold text-[#0c4a6e] mt-2">$</span>
-                    <span className="text-6xl font-bold text-[#0c4a6e]">
+                <div className="py-4 border-b border-black/5">
+                  <div className="flex items-start justify-center mb-1">
+                    <span className="text-2xl font-semibold text-black mt-1">$</span>
+                    <span className="text-4xl font-semibold text-black">
                       {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
                     </span>
                   </div>
-                  <p className="text-[#0c4a6e]/60 text-center">
+                  <p className="text-black/50 text-center text-sm">
                     {isYearly ? 'per year' : 'per month'}
                   </p>
                 </div>
 
                 {/* Features */}
-                <ul className="space-y-3 my-8">
+                <ul className="space-y-2 my-6">
                   {plan.features.map((feature, i) => (
-                    <li key={i} className="text-[#0c4a6e]/80">
+                    <li key={i} className="text-black/60 text-sm">
                       {feature}
                     </li>
                   ))}
@@ -139,16 +138,16 @@ export default function Pricing() {
                 {/* CTA */}
                 <Link
                   href="/auth/register"
-                  className={`btn btn-lg w-full text-lg font-semibold ${
+                  className={`btn w-full font-normal ${
                     plan.popular
-                      ? 'bg-[#0ea5e9] hover:bg-[#0284c7] text-white border-none'
-                      : 'btn-outline border-2 border-[#0c4a6e] text-[#0c4a6e] hover:bg-[#0c4a6e] hover:text-white'
+                      ? 'bg-black hover:bg-black/80 text-white border-none'
+                      : 'btn-outline border border-black/20 text-black hover:bg-black/5'
                   }`}
                 >
                   Start free trial
                 </Link>
 
-                <p className="text-center text-sm text-[#0c4a6e]/60 mt-4">
+                <p className="text-center text-xs text-black/40 mt-3">
                   7-day free trial • No card required
                 </p>
               </div>
@@ -157,21 +156,21 @@ export default function Pricing() {
         </div>
 
         {/* Trust */}
-        <div className="text-center mt-20 animate-fade-in">
-          <div className="flex items-center justify-center gap-4">
-            <div className="avatar-group -space-x-4">
+        <div className="text-center mt-16">
+          <div className="flex items-center justify-center gap-3">
+            <div className="avatar-group -space-x-3">
               <div className="avatar">
-                <div className="w-10 h-10 rounded-full bg-[#0ea5e9]"></div>
+                <div className="w-8 h-8 rounded-full bg-black/10"></div>
               </div>
               <div className="avatar">
-                <div className="w-10 h-10 rounded-full bg-[#0284c7]"></div>
+                <div className="w-8 h-8 rounded-full bg-black/10"></div>
               </div>
               <div className="avatar">
-                <div className="w-10 h-10 rounded-full bg-[#06b6d4]"></div>
+                <div className="w-8 h-8 rounded-full bg-black/10"></div>
               </div>
             </div>
-            <p className="text-[#0c4a6e]/70">
-              <span className="font-bold text-[#0c4a6e]">500+</span> founders already shipped
+            <p className="text-black/60 text-sm">
+              <span className="font-medium text-black">500+</span> founders already shipped
             </p>
           </div>
         </div>

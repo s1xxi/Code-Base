@@ -27,25 +27,24 @@ export default function FAQ() {
   ]
 
   return (
-    <section id="faq" className="py-24 px-4 bg-[#f0f9ff]">
-      <div className="container mx-auto max-w-4xl">
-        <h2 className="text-5xl md:text-6xl font-bold text-center mb-16 text-[#0c4a6e] animate-slide-down">
+    <section id="faq" className="py-20 px-4 bg-[#e0f2fe]">
+      <div className="container mx-auto max-w-3xl">
+        <h2 className="text-3xl md:text-4xl font-semibold text-center mb-14 text-black">
           FAQ
         </h2>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {faqs.map((faq, index) => (
             <div 
               key={index} 
-              className="collapse collapse-plus bg-white border border-[#0c4a6e]/20 animate-slide-up"
-              style={{ animationDelay: `${index * 0.05}s` }}
+              className="collapse collapse-plus bg-white/50 border border-black/5 hover:bg-white/70 transition-colors duration-200"
             >
               <input type="radio" name="faq-accordion" />
-              <div className="collapse-title text-xl font-bold text-[#0c4a6e]">
+              <div className="collapse-title font-semibold text-black">
                 {faq.question}
               </div>
               <div className="collapse-content">
-                <p className="text-[#0c4a6e]/70 text-lg">
+                <p className="text-black/60 text-sm">
                   {faq.answer}
                 </p>
               </div>
