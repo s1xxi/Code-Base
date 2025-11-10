@@ -25,53 +25,37 @@ export async function POST(req) {
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
-        // Payment successful - grant access
+        // ONE-TIME Payment successful - grant LIFETIME access
         const session = event.data.object
         const userId = session.metadata.userId
 
+        console.log('✅ Payment successful for user:', userId)
+
         await User.findByIdAndUpdate(userId, {
           customerId: session.customer,
-          priceId: session.line_items?.data[0]?.price?.id,
-          hasAccess: true,
+          hasAccess: true, // Lifetime access - never expires!
         })
+        
+        console.log('✅ User access granted!')
         break
       }
 
-      case 'customer.subscription.deleted': {
-        // Subscription cancelled - revoke access
-        const subscription = event.data.object
-
-        await User.findOneAndUpdate(
-          { customerId: subscription.customer },
-          { hasAccess: false }
-        )
+      case 'payment_intent.succeeded': {
+        // Alternative payment success event
+        const paymentIntent = event.data.object
+        console.log('✅ Payment intent succeeded:', paymentIntent.id)
         break
       }
 
-      case 'customer.subscription.updated': {
-        // Subscription updated
-        const subscription = event.data.object
-
-        await User.findOneAndUpdate(
-          { customerId: subscription.customer },
-          {
-            priceId: subscription.items.data[0].price.id,
-            hasAccess: subscription.status === 'active',
-          }
-        )
-        break
-      }
-
-      case 'invoice.payment_failed': {
+      case 'payment_intent.payment_failed': {
         // Payment failed
-        const invoice = event.data.object
-
-        await User.findOneAndUpdate(
-          { customerId: invoice.customer },
-          { hasAccess: false }
-        )
+        const paymentIntent = event.data.object
+        console.error('❌ Payment failed:', paymentIntent.id)
         break
       }
+
+      default:
+        console.log(`Unhandled event type: ${event.type}`)
     }
 
     return NextResponse.json({ received: true })
@@ -83,4 +67,3 @@ export async function POST(req) {
     )
   }
 }
-

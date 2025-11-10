@@ -44,7 +44,7 @@ export async function POST(req) {
       await User.findByIdAndUpdate(user._id, { customerId })
     }
 
-    // Create checkout session
+    // Create checkout session for ONE-TIME payment
     const checkoutSession = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [
@@ -53,9 +53,9 @@ export async function POST(req) {
           quantity: 1,
         },
       ],
-      mode: 'subscription',
+      mode: 'payment', // ONE-TIME payment (not subscription)
       success_url: `${process.env.NEXTAUTH_URL}/dashboard?success=true`,
-      cancel_url: `${process.env.NEXTAUTH_URL}/dashboard?canceled=true`,
+      cancel_url: `${process.env.NEXTAUTH_URL}/?canceled=true`,
       metadata: {
         userId: user._id.toString(),
       },
