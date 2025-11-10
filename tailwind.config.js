@@ -7,21 +7,11 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        'ocean-deep': '#0A2342',
-        'ocean-blue': '#2C5F8D',
-        'ocean-teal': '#3A9FB5',
-        'seafoam': '#7DD3C0',
-        'sand': '#F4E4C1',
-        'driftwood': '#8B7355',
-      },
       animation: {
         'fade-in': 'fadeIn 0.8s ease-in',
         'slide-up': 'slideUp 0.6s ease-out',
         'slide-down': 'slideDown 0.6s ease-out',
         'scale-in': 'scaleIn 0.5s ease-out',
-        'float': 'float 3s ease-in-out infinite',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
         fadeIn: {
@@ -37,12 +27,8 @@ module.exports = {
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
         scaleIn: {
-          '0%': { transform: 'scale(0.9)', opacity: '0' },
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
           '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
         },
       },
     },
@@ -52,25 +38,24 @@ module.exports = {
     themes: [
       {
         ocean: {
-          'primary': '#3A9FB5',
+          'primary': '#0ea5e9',           // Sky blue
           'primary-content': '#ffffff',
-          'secondary': '#7DD3C0',
-          'secondary-content': '#0A2342',
-          'accent': '#2C5F8D',
+          'secondary': '#0284c7',         // Ocean blue
+          'secondary-content': '#ffffff',
+          'accent': '#06b6d4',            // Cyan
           'accent-content': '#ffffff',
-          'neutral': '#0A2342',
+          'neutral': '#0c4a6e',           // Deep ocean
           'neutral-content': '#ffffff',
-          'base-100': '#ffffff',
-          'base-200': '#F4E4C1',
-          'base-300': '#E8D4A8',
-          'base-content': '#0A2342',
-          'info': '#3A9FB5',
-          'success': '#7DD3C0',
-          'warning': '#F4E4C1',
-          'error': '#DC2626',
+          'base-100': '#ffffff',          // White
+          'base-200': '#f0f9ff',          // Very light blue
+          'base-300': '#e0f2fe',          // Light blue
+          'base-content': '#0c4a6e',      // Deep ocean text
+          'info': '#0ea5e9',
+          'success': '#10b981',
+          'warning': '#f59e0b',
+          'error': '#ef4444',
         },
       },
-      'dark',
     ],
   },
 }
