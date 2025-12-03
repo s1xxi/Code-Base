@@ -27,9 +27,14 @@ export default function FAQ() {
   ]
 
   return (
-    <section id="faq" className="py-20 px-4 bg-[#e0f2fe]">
-      <div className="container mx-auto max-w-3xl">
-        <h2 className="text-3xl md:text-4xl font-semibold text-center mb-14 text-black">
+    <section id="faq" className="relative overflow-hidden bg-[#fdfefe] px-4 py-24 text-slate-900">
+      <div className="pointer-events-none absolute inset-0 opacity-60">
+        <div className="absolute top-10 right-24 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(191,219,254,0.45),transparent_70%)] blur-3xl"></div>
+        <div className="absolute bottom-[-50px] left-16 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(191,219,254,0.35),transparent_70%)] blur-3xl"></div>
+      </div>
+      
+      <div className="container relative z-10 mx-auto max-w-3xl">
+        <h2 className="mb-14 text-center text-3xl font-semibold leading-tight md:text-4xl">
           FAQ
         </h2>
 
@@ -37,14 +42,14 @@ export default function FAQ() {
           {faqs.map((faq, index) => (
             <div 
               key={index} 
-              className="collapse collapse-plus bg-white/50 border border-black/5 hover:bg-white/70 transition-colors duration-200"
+              className="collapse collapse-plus border border-blue-100 bg-white shadow-[0_12px_40px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-[2px] hover:border-blue-200"
             >
               <input type="radio" name="faq-accordion" />
-              <div className="collapse-title font-semibold text-black">
+              <div className="collapse-title text-xl font-semibold text-slate-900 md:text-2xl">
                 {faq.question}
               </div>
               <div className="collapse-content">
-                <p className="text-black/60 text-sm">
+                <p className="text-lg font-medium text-slate-600 md:text-xl">
                   {faq.answer}
                 </p>
               </div>

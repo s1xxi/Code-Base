@@ -3,14 +3,21 @@ import { authOptions } from '@/libs/next-auth'
 import connectMongo from '@/libs/mongoose'
 import User from '@/models/User'
 import ButtonAccount from '@/components/ButtonAccount'
-import Link from 'next/link'
+import PaymentSuccessHandler from '@/components/PaymentSuccessHandler'
+import { redirect } from 'next/navigation'
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams }) {
   const session = await getServerSession(authOptions)
+
+  if (!session) {
+    redirect('/auth/login')
+  }
 
   // Fetch user from database to check access
   await connectMongo()
   const user = await User.findOne({ email: session?.user?.email }).lean()
+
+  const paymentSuccess = typeof searchParams === 'object' && searchParams?.success === 'true'
 
   // If user hasn't paid, show paywall
   if (!user?.hasAccess) {
@@ -18,6 +25,10 @@ export default async function DashboardPage() {
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="card bg-base-100 shadow-2xl max-w-lg">
           <div className="card-body items-center text-center">
+            {paymentSuccess && (
+              <PaymentSuccessHandler />
+            )}
+            
             <div className="text-6xl mb-4">🔒</div>
             <h2 className="card-title text-3xl mb-4">Get Lifetime Access</h2>
             <p className="text-base-content/70 mb-6">
@@ -59,7 +70,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Success Alert if just purchased */}
-      {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('success') && (
+      {paymentSuccess && (
         <div className="alert alert-success">
           <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />

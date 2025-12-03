@@ -3,22 +3,13 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-export default function Pricing() {
-  const [isYearly, setIsYearly] = useState(false)
-
   const plans = [
     {
       name: 'Starter',
-      description: 'For side projects',
+      description: 'Perfect for getting started',
       monthlyPrice: 9.99,
       yearlyPrice: 100,
-      features: [
-        'Up to 1,000 users',
-        'Basic analytics',
-        'Email support',
-        'API access',
-        'Monthly updates',
-      ],
+    features: ['Up to 1,000 users', 'Basic analytics', 'Email support', 'API access', 'Monthly updates'],
     },
     {
       name: 'Pro',
@@ -54,127 +45,97 @@ export default function Pricing() {
     },
   ]
 
+export default function Pricing() {
+  const [isYearly, setIsYearly] = useState(false)
+
   return (
-    <section id="pricing" className="py-20 px-4 bg-[#e0f2fe]">
+    <section id="pricing" className="relative overflow-hidden bg-[#010615] px-4 py-24 text-white">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-3 text-black">
-            Simple pricing
-          </h2>
-          <p className="text-black/60">
-            7-day free trial • Cancel anytime
-          </p>
+        <div className="text-center">
+          <p className="text-base font-semibold uppercase tracking-[0.5em] text-white/80">Pricing</p>
+          <h2 className="mt-3 text-4xl font-semibold leading-tight text-white">Simple pricing for serious launches</h2>
         </div>
 
-        {/* Monthly/Yearly Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-14">
-          <span className={`text-sm font-medium ${!isYearly ? 'text-black' : 'text-black/40'}`}>
-            Monthly
-          </span>
-          
+        <div className="mt-10 flex items-center justify-center gap-4">
+          <span className={`text-base font-medium ${!isYearly ? 'text-white' : 'text-white/40'}`}>Monthly</span>
           <button
+            type="button"
             onClick={() => setIsYearly(!isYearly)}
-            className="relative w-16 h-8 rounded-full bg-black/10 transition-all duration-300"
+            className="relative h-8 w-16 rounded-full bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
-            <div
-              className={`absolute top-1 left-1 w-6 h-6 bg-black rounded-full shadow transition-transform duration-300 ${
-                isYearly ? 'transform translate-x-8' : ''
+            <span
+              className={`absolute top-1 left-1 h-6 w-6 rounded-full bg-white shadow transition-transform ${
+                isYearly ? 'translate-x-8' : 'translate-x-0'
               }`}
-            ></div>
+            ></span>
           </button>
-          
-          <span className={`text-sm font-medium ${isYearly ? 'text-black' : 'text-black/40'}`}>
-            Yearly
-          </span>
-          
-          {isYearly && (
-            <span className="badge bg-black text-white border-none font-normal text-xs">
-              Save up to 47%
-            </span>
-          )}
+          <span className={`text-base font-medium ${isYearly ? 'text-white' : 'text-white/40'}`}>Yearly</span>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {plans.map((plan, index) => (
-            <div
-              key={index}
-              className={`card bg-white/50 border hover:bg-white/70 transition-colors duration-200 ${
-                plan.popular ? 'border-black' : 'border-black/10'
-              }`}
-            >
-              {plan.popular && (
-                <div className="badge bg-black text-white border-none absolute -top-2 left-1/2 transform -translate-x-1/2 font-normal text-xs px-3">
-                  MOST POPULAR
+        <div className="mt-16 grid gap-8 md:grid-cols-3">
+          {plans.map((plan) => {
+            const isPro = plan.name === 'Pro'
+            const isExpert = plan.name === 'Expert'
+            // Light blue for Starter, medium blue for Pro, dark blue for Expert
+            const borderColor = isExpert ? '#1e40af' : isPro ? '#3b82f6' : '#60a5fa' // dark blue, medium blue, light blue
+            const glowColor = isExpert ? 'rgba(30,64,175,0.6)' : isPro ? 'rgba(59,130,246,0.6)' : 'rgba(96,165,250,0.6)'
+            
+            return (
+              <div key={plan.name} className="group relative rounded-[34px] bg-gradient-to-br from-[#090c16] via-[#040406] to-[#050507] p-[3px] shadow-[0_35px_130px_rgba(0,0,0,0.7)]">
+                <div 
+                  className="pointer-events-none absolute inset-0 rounded-[34px] border-[3px] transition-all duration-500"
+              style={{
+                    borderColor: borderColor
+                  }}
+                >
+                  <div 
+                    className="absolute inset-0 rounded-[34px] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    style={{ 
+                      boxShadow: `0 0 20px ${glowColor}, 0 0 40px ${glowColor}, 0 0 60px ${glowColor}`
+              }}
+                  ></div>
+                  <div 
+                    className="absolute inset-[5%] rounded-[30px] blur-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-60" 
+                    style={{ 
+                      background: `radial-gradient(circle,${glowColor},transparent_70%)`
+                    }}
+                  ></div>
                 </div>
-              )}
-
-              <div className="card-body p-6">
-                <h3 className="text-xl font-semibold text-black mb-1">{plan.name}</h3>
-                <p className="text-black/50 text-sm mb-4">{plan.description}</p>
-
-                {/* Price */}
-                <div className="py-4 border-b border-black/5">
-                  <div className="flex items-start justify-center mb-1">
-                    <span className="text-2xl font-semibold text-black mt-1">$</span>
-                    <span className="text-4xl font-semibold text-black">
-                      {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
+                <div className="relative h-full rounded-[32px] bg-[#010615] p-8 text-white">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-2xl font-semibold text-white">{plan.name}</h3>
+                    {plan.popular && <span className="rounded-full bg-white/10 px-3 py-1 text-base text-white">Popular</span>}
+                </div>
+                  <p className="mt-2 text-base font-medium text-white/70">{plan.description}</p>
+                  <div className="mt-8 flex items-end gap-2">
+                    <span className="text-5xl font-semibold text-white">
+                      ${isYearly ? plan.yearlyPrice : plan.monthlyPrice}
                     </span>
-                  </div>
-                  <p className="text-black/50 text-center text-sm">
-                    {isYearly ? 'per year' : 'per month'}
-                  </p>
+                    <span className="text-base text-white/70">{isYearly ? '/yr' : '/mo'}</span>
                 </div>
 
-                {/* Features */}
-                <ul className="space-y-2 my-6">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="text-black/60 text-sm">
+                  <ul className="mt-8 space-y-3 text-base font-medium text-white/80">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2">
+                        <span className="text-blue-200">✓</span>
                       {feature}
                     </li>
                   ))}
                 </ul>
 
-                {/* CTA */}
                 <Link
-                  href="/auth/register"
-                  className={`btn w-full font-normal ${
-                    plan.popular
-                      ? 'bg-black hover:bg-black/80 text-white border-none'
-                      : 'btn-outline border border-black/20 text-black hover:bg-black/5'
-                  }`}
+                    href={`/checkout?plan=${encodeURIComponent(plan.name)}&period=${isYearly ? 'yearly' : 'monthly'}&price=${(isYearly ? plan.yearlyPrice : plan.monthlyPrice).toFixed ? (isYearly ? plan.yearlyPrice : plan.monthlyPrice).toFixed(2) : isYearly ? plan.yearlyPrice : plan.monthlyPrice}`}
+                    className="btn mt-10 w-full border border-white/30 bg-white/10 text-white hover:bg-white/20"
                 >
-                  Start free trial
+                  Get Started
                 </Link>
-
-                <p className="text-center text-xs text-black/40 mt-3">
-                  7-day free trial • No card required
-                </p>
-              </div>
-            </div>
-          ))}
         </div>
-
-        {/* Trust */}
-        <div className="text-center mt-16">
-          <div className="flex items-center justify-center gap-3">
-            <div className="avatar-group -space-x-3">
-              <div className="avatar">
-                <div className="w-8 h-8 rounded-full bg-black/10"></div>
               </div>
-              <div className="avatar">
-                <div className="w-8 h-8 rounded-full bg-black/10"></div>
-              </div>
-              <div className="avatar">
-                <div className="w-8 h-8 rounded-full bg-black/10"></div>
-              </div>
-            </div>
-            <p className="text-black/60 text-sm">
-              <span className="font-medium text-black">500+</span> founders already shipped
-            </p>
-          </div>
+            )
+          })}
         </div>
       </div>
     </section>
   )
 }
+

@@ -14,8 +14,8 @@ export default function ButtonSignin() {
     return (
       <div className="dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-          <div className="w-10 rounded-full bg-primary text-primary-content flex items-center justify-center">
-            {session.user?.email?.[0]?.toUpperCase() || 'U'}
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 text-white">
+            <span className="text-lg">🙂</span>
           </div>
         </label>
         <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">

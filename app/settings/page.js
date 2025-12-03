@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import DashboardNav from '@/components/DashboardNav'
 
 export default function SettingsPage() {
@@ -12,7 +13,10 @@ export default function SettingsPage() {
     email: '',
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingBilling, setIsLoadingBilling] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const [message, setMessage] = useState({ type: '', text: '' })
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     if (session?.user) {
@@ -20,8 +24,73 @@ export default function SettingsPage() {
         name: session.user.name || '',
         email: session.user.email || '',
       })
+      fetchUser()
     }
   }, [session])
+
+  async function fetchUser() {
+    try {
+      const res = await fetch('/api/user')
+      if (res.ok) {
+        const data = await res.json()
+        setUser(data.user)
+      }
+    } catch (error) {
+      console.error('Failed to fetch user:', error)
+    }
+  }
+
+  async function handleManageBilling() {
+    setIsLoadingBilling(true)
+    try {
+      const res = await fetch('/api/stripe/create-portal', {
+        method: 'POST',
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to create portal session')
+      }
+
+      if (data.url) {
+        window.location.href = data.url
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: error.message })
+      setIsLoadingBilling(false)
+    }
+  }
+
+  async function handleDeleteAccount() {
+    if (!confirm('Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.')) {
+      return
+    }
+
+    if (!confirm('This is your last chance. Are you absolutely sure?')) {
+      return
+    }
+
+    setIsDeleting(true)
+    setMessage({ type: '', text: '' })
+
+    try {
+      const res = await fetch('/api/user/delete', {
+        method: 'DELETE',
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || 'Failed to delete account')
+      }
+
+      // Redirect to home page after deletion
+      window.location.href = '/?accountDeleted=true'
+    } catch (error) {
+      setMessage({ type: 'error', text: error.message })
+      setIsDeleting(false)
+    }
+  }
 
   if (status === 'unauthenticated') {
     redirect('/auth/login')
@@ -116,13 +185,54 @@ export default function SettingsPage() {
           {/* Subscription */}
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-              <h2 className="card-title mb-4">Subscription</h2>
+              <h2 className="card-title mb-4">Billing & Subscription</h2>
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="font-semibold">Current Plan: Free</p>
-                  <p className="text-sm text-base-content/70">Upgrade to unlock more features</p>
+                  <p className="font-semibold">
+                    {user?.hasAccess ? 'Active' : 'No Active Subscription'}
+                  </p>
+                  <p className="text-sm text-base-content/70">
+                    {user?.hasAccess 
+                      ? 'Manage your billing, payment methods, and invoices' 
+                      : 'Upgrade to unlock more features'}
+                  </p>
                 </div>
-                <button className="btn btn-primary">Upgrade</button>
+                <div className="flex gap-3">
+                  {user?.hasAccess && (
+                    <Link href="/billing" className="btn btn-outline">
+                      View Billing History
+                    </Link>
+                  )}
+                  {user?.hasAccess ? (
+                    <button 
+                      onClick={handleManageBilling}
+                      className="btn btn-primary"
+                      disabled={isLoadingBilling}
+                    >
+                      {isLoadingBilling ? 'Loading...' : 'Manage Billing'}
+                    </button>
+                  ) : (
+                    <Link href="/#pricing" className="btn btn-primary">
+                      Upgrade
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Password Change */}
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body">
+              <h2 className="card-title mb-4">Change Password</h2>
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="font-semibold">Update your password</p>
+                  <p className="text-sm text-base-content/70">Keep your account secure with a strong password</p>
+                </div>
+                <Link href="/auth/change-password" className="btn btn-primary btn-outline">
+                  Change Password
+                </Link>
               </div>
             </div>
           </div>
@@ -134,9 +244,15 @@ export default function SettingsPage() {
               <div className="flex justify-between items-center">
                 <div>
                   <p className="font-semibold">Delete Account</p>
-                  <p className="text-sm text-base-content/70">Permanently delete your account and all data</p>
+                  <p className="text-sm text-base-content/70">Permanently delete your account and all data. This action cannot be undone.</p>
                 </div>
-                <button className="btn btn-error btn-outline">Delete Account</button>
+                <button 
+                  onClick={handleDeleteAccount}
+                  className="btn btn-error btn-outline"
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete Account'}
+                </button>
               </div>
             </div>
           </div>
